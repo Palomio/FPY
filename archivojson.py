@@ -11,3 +11,4 @@ with open ('archicojson','w')as archivo:
 with open ('archicojson','r')as archivo:
     leer=json.load(archivo)
     print(leer)
+#hola mundo
