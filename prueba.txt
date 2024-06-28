@@ -1,0 +1,93 @@
+import csv
+#########################################################################
+def menu_proyecto():
+    print("1. Prestar notebook")
+    print("2. Devolver notebook")
+    print("3. Modificar préstamo de notebooks")
+    print("4. Imprimir la lista de notebooks prestados")
+    print("5. Termianar Clase")
+    return""
+#########################################################################
+def buscarDatos(archivo):
+    datos = []
+    with open(archivo, newline='') as csvfile:
+        lector = csv.DictReader(csvfile)
+        for fila in lector:
+            datos.append(fila)
+    return datos
+#########################################################################
+def prestarNotebook(datos):
+    nuevoAlumno={
+        "nombre":input("Ingrese el nombre del alumno: "),
+        "rut":int(input("Ingrese el rut del alumno: ")),
+        "documento":input("Ingrese el tipo de documentos(carnet/pase): "),
+        "numero":input("Ingrese el notebook a prestar: ")
+    }
+    datos.append(nuevoAlumno)
+    guardarDatosEnCSV(archivo,datos)
+#########################################################################
+def modificarNotebook(datos):
+    actualizar_note =input("Ingrese el rut del alumno: ")
+    exists = False
+    for item in datos:
+        if item["rut"]==actualizar_note:
+            item["cantidad"]= input("Ingrese cantiadad a prestar: ")
+            guardarDatosEnCSV(archivo,datos)
+            print(f"Producto '{item['nombre']}' actualizado correctamente.")
+            exists = True
+            break
+    if (exists == False):
+        print(f"No se encontro el usuario(rut) '{actualizar_note}'")
+#########################################################################
+def devolverNotebook(datos):
+    rutAlumno=input("Ingrese el rut del alumno: ")
+    exists = False
+    for item in datos:
+        if item["rut"]==rutAlumno:
+            datos.remove(item)
+            guardarDatosEnCSV(archivo,datos)
+            exists = True
+            print(f"Alumno a sido eliminado")
+            break
+    if (exists == False):
+        print(f"No se encontro el rut del alumno '{rutAlumno}'")
+
+##########################################################################
+def guardarDatosEnCSV(archivo,datos):
+    with open(archivo,'w',newline='') as csvfile:
+        campo=["nombre","rut","documento","numero"]
+        escritor=csv.DictWriter(csvfile,fieldnames=campo)
+        escritor.writeheader()
+        for file in datos:
+            escritor.writerow(file)
+##########################################################################
+def terminarClase():
+
+    print("saliendo del programa")
+    
+##########################################################################
+def imprimirLista(datos):
+    with open(archivo,'w',newline='') as csvfile:
+        campo=["nombre","rut","documanto"]
+        escritor=csv.DictWriter(csvfile,fieldnames=campo)
+        escritor.writeheader()
+        for file in datos:
+            escritor.writerow(file)
+##########################################################################
+archivo="PabloSaldañaBIY1101-008D.csv"
+datosLocal = buscarDatos(archivo)
+
+while True:
+
+    opcion=int(input(f"{menu_proyecto()}"))
+    if opcion ==1:
+       prestarNotebook(datosLocal)
+    elif opcion==2:
+        devolverNotebook(datosLocal)
+    elif opcion==3:
+        modificarNotebook(datosLocal)
+    elif opcion==4:
+        imprimirLista(datosLocal)
+    elif opcion==5:
+        terminarClase()
+        break
